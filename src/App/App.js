@@ -16,7 +16,7 @@ import Home from '../components/Pages/Home/home';
 import Friends from '../components/Pages/Friends/friends';
 import Articles from '../components/Pages/Articles/articles';
 import Weather from '../components/Pages/Weather/weather';
-import Events from '../components/Pages/Events/events';
+import Events from '../components/Pages/Events/Events';
 import Messages from '../components/Pages/Messages/messages';
 import MyNavbar from '../components/MyNavbar/myNavbar';
 import './App.scss';
@@ -39,6 +39,7 @@ const PrivateRoute = ({ component: Component, authed, ...rest }) => {
 class App extends React.Component {
   state = {
     authed: false,
+    currentUid: '',
     pendingUser: true,
   }
 
@@ -46,13 +47,16 @@ class App extends React.Component {
     connection();
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        const currentUid = authRequests.getCurrentUid();
         this.setState({
           authed: true,
+          currentUid,
           pendingUser: false,
         });
       } else {
         this.setState({
           authed: false,
+          currentUid: '',
           pendingUser: false,
         });
       }
@@ -68,6 +72,7 @@ class App extends React.Component {
       authed,
       pendingUser,
     } = this.state;
+
     const logoutClickEvent = () => {
       authRequests.logoutUser();
       this.setState({ authed: false });
