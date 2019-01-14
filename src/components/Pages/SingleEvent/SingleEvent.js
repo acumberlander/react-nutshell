@@ -9,7 +9,6 @@ class SingleEvent extends React.Component {
 
   render() {
     const { event } = this.props;
-    console.log(event);
     return (
       <div className="eventContainer card">
         <div className="singleEvent text-center mx-auto">

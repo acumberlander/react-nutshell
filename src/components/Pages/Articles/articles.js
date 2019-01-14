@@ -1,6 +1,6 @@
 import React from 'react';
 import './articles.scss';
-// import { homedir } from 'os';
+
 
 class Articles extends React.Component {
   render() {
