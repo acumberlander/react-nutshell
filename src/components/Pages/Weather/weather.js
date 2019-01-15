@@ -1,6 +1,5 @@
 import React from 'react';
 import './weather.scss';
-// import { homedir } from 'os';
 
 class Weather extends React.Component {
   render() {

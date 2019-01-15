@@ -1,6 +1,5 @@
 import React from 'react';
 import './messages.scss';
-// import { homedir } from 'os';
 
 class Messages extends React.Component {
   render() {
