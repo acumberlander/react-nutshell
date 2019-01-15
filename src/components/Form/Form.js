@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Form.scss';
 import authRequests from '../../Helpers/Data/authRequests';
+import eventRequests from '../../Helpers/Data/Requests/eventRequests';
 
 const defaultEvent = {
   uid: '',
@@ -13,6 +14,8 @@ const defaultEvent = {
 class Form extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
+    isEditing: PropTypes.bool,
+    editId: PropTypes.string,
   }
 
   state = {
@@ -41,9 +44,26 @@ class Form extends React.Component {
     this.setState({ newEvent: defaultEvent });
   }
 
+  componentDidUpdate(prevProps) {
+    const { isEditing, editId } = this.props;
+    if (prevProps !== this.props && isEditing) {
+      eventRequests.getSingleEvent(editId)
+        .then((event) => {
+          this.setState({ newEvent: event.data });
+        })
+        .catch(err => console.error('error when getSingleEvent', err));
+    }
+  }
+
   render() {
     const { newEvent } = this.state;
-    const title = () => <h2>Add New Event:</h2>;
+    const { isEditing } = this.props;
+    const title = () => {
+      if (isEditing) {
+        return <h2>Add New Event:</h2>;
+      }
+      return <h2>Add New Event:</h2>;
+    };
     return (
       <div className="eventForm col">
       {title()}

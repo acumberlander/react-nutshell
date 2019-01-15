@@ -9,6 +9,8 @@ import eventRequests from '../../../Helpers/Data/Requests/eventRequests';
 class Events extends React.Component {
   state = {
     events: [],
+    isEditing: false,
+    editId: '-1',
   }
 
   componentDidMount() {
@@ -23,23 +25,45 @@ class Events extends React.Component {
   }
 
   formSubmitEvent = (newEvent) => {
-    eventRequests.postRequest(newEvent)
-      .then(() => {
-        const currentUid = authRequests.getCurrentUid();
-        smashRequests.getEventsFromMeAndFriends(currentUid)
-          .then((events) => {
-            this.setState({ events });
-          });
-      })
-      .catch(err => console.error('error with events post', err));
+    const { isEditing, editId } = this.state;
+    if (isEditing) {
+      eventRequests.updateEvent(editId, newEvent)
+        .then(() => {
+          const currentUid = authRequests.getCurrentUid();
+          smashRequests.getEventsFromMeAndFriends(currentUid)
+            .then((events) => {
+              this.setState({ events, isEditing: false, editId: '-1' });
+            });
+        })
+        .catch(err => console.error('error with listings post', err));
+    } else {
+      eventRequests.postRequest(newEvent)
+        .then(() => {
+          const currentUid = authRequests.getCurrentUid();
+          smashRequests.getEventsFromMeAndFriends(currentUid)
+            .then((events) => {
+              this.setState({ events });
+            });
+        })
+        .catch(err => console.error('error with events post', err));
+    }
   };
 
   render() {
-    const { events } = this.state;
+    const passEventToEdit = (eventId) => {
+      this.setState({ isEditing: true, editId: eventId });
+    };
+
+    const {
+      events,
+      isEditing,
+      editId,
+    } = this.state;
     const singleEventComponents = events.map(event => (
       <SingleEvent
         event={event}
         key={event.id}
+        passEventToEdit={passEventToEdit}
       />
     ));
     return (
@@ -53,6 +77,8 @@ class Events extends React.Component {
         <div className="addNewEvent">
           <Form
             onSubmit={this.formSubmitEvent}
+            isEditing={isEditing}
+            editId={editId}
           />
         </div>
       </div>
