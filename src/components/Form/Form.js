@@ -7,15 +7,15 @@ import eventRequests from '../../Helpers/Data/Requests/eventRequests';
 const defaultEvent = {
   uid: '',
   event: '',
-  startdate: '',
+  startDate: '',
   location: '',
 };
 
 class Form extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
-    isEditing: PropTypes.func,
-    editId: PropTypes.func,
+    isEditing: PropTypes.bool,
+    editId: PropTypes.string,
   }
 
   state = {
@@ -31,7 +31,7 @@ class Form extends React.Component {
 
   eventChange = e => this.formFieldStringState('event', e);
 
-  dateChange = e => this.formFieldStringState('startdate', e);
+  dateChange = e => this.formFieldStringState('startDate', e);
 
   locationChange = e => this.formFieldStringState('location', e);
 
@@ -57,7 +57,13 @@ class Form extends React.Component {
 
   render() {
     const { newEvent } = this.state;
-    const title = () => <h2>Add New Event:</h2>;
+    const { isEditing } = this.props;
+    const title = () => {
+      if (isEditing) {
+        return <h2>Add New Event:</h2>;
+      }
+      return <h2>Add New Event:</h2>;
+    };
     return (
       <div className="eventForm col">
       {title()}
@@ -80,7 +86,7 @@ class Form extends React.Component {
               className="form-control"
               id="startDate"
               placeholder="02/23/2019"
-              value={newEvent.startdate}
+              value={newEvent.startDate}
               onChange={this.dateChange}
             />
           </div>

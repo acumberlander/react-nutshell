@@ -25,15 +25,28 @@ class Events extends React.Component {
   }
 
   formSubmitEvent = (newEvent) => {
-    eventRequests.postRequest(newEvent)
-      .then(() => {
-        const currentUid = authRequests.getCurrentUid();
-        smashRequests.getEventsFromMeAndFriends(currentUid)
-          .then((events) => {
-            this.setState({ events });
-          });
-      })
-      .catch(err => console.error('error with events post', err));
+    const { isEditing, editId } = this.state;
+    if (isEditing) {
+      eventRequests.updateEvent(editId, newEvent)
+        .then(() => {
+          const currentUid = authRequests.getCurrentUid();
+          smashRequests.getEventsFromMeAndFriends(currentUid)
+            .then((events) => {
+              this.setState({ events, isEditing: false, editId: '-1' });
+            });
+        })
+        .catch(err => console.error('error with listings post', err));
+    } else {
+      eventRequests.postRequest(newEvent)
+        .then(() => {
+          const currentUid = authRequests.getCurrentUid();
+          smashRequests.getEventsFromMeAndFriends(currentUid)
+            .then((events) => {
+              this.setState({ events });
+            });
+        })
+        .catch(err => console.error('error with events post', err));
+    }
   };
 
   passEventToEdit = eventId => this.setState({ isEditing: true, editId: eventId });
@@ -51,6 +64,10 @@ class Events extends React.Component {
   }
 
   render() {
+    const passEventToEdit = (eventId) => {
+      this.setState({ isEditing: true, editId: eventId });
+    };
+
     const {
       events,
       isEditing,
@@ -60,7 +77,7 @@ class Events extends React.Component {
       <SingleEvent
         event={event}
         key={event.id}
-        passEventToEdit={this.passEventToEdit}
+        passEventToEdit={passEventToEdit}
         deleteSingleEvent={this.deleteSingleEvent}
       />
     ));
