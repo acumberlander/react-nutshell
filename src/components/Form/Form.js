@@ -7,7 +7,7 @@ import eventRequests from '../../Helpers/Data/Requests/eventRequests';
 const defaultEvent = {
   uid: '',
   event: '',
-  startdate: '',
+  startDate: '',
   location: '',
 };
 
@@ -31,7 +31,7 @@ class Form extends React.Component {
 
   eventChange = e => this.formFieldStringState('event', e);
 
-  dateChange = e => this.formFieldStringState('startdate', e);
+  dateChange = e => this.formFieldStringState('startDate', e);
 
   locationChange = e => this.formFieldStringState('location', e);
 
@@ -80,7 +80,7 @@ class Form extends React.Component {
               className="form-control"
               id="startDate"
               placeholder="02/23/2019"
-              value={newEvent.startdate}
+              value={newEvent.startDate}
               onChange={this.dateChange}
             />
           </div>
