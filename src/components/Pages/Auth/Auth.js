@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import authRequests from '../../../Helpers/Data/authRequests';
-import './auth.scss';
+import './Auth.scss';
 
 class Auth extends React.Component {
   authenticateUser = (e) => {
