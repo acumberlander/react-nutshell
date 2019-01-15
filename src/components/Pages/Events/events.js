@@ -9,6 +9,8 @@ import eventRequests from '../../../Helpers/Data/Requests/eventRequests';
 class Events extends React.Component {
   state = {
     events: [],
+    isEditing: false,
+    editId: '-1',
   }
 
   componentDidMount() {
@@ -34,12 +36,20 @@ class Events extends React.Component {
       .catch(err => console.error('error with events post', err));
   };
 
+  passEventToEdit = eventId => this.setState({ isEditing: true, editId: eventId });
+
+
   render() {
-    const { events } = this.state;
+    const {
+      events,
+      isEditing,
+      editId,
+    } = this.state;
     const singleEventComponents = events.map(event => (
       <SingleEvent
         event={event}
         key={event.id}
+        passEventToEdit={this.passEventToEdit}
       />
     ));
     return (
@@ -53,6 +63,8 @@ class Events extends React.Component {
         <div className="addNewEvent">
           <Form
             onSubmit={this.formSubmitEvent}
+            isEditing={isEditing}
+            editId={editId}
           />
         </div>
       </div>
