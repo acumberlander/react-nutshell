@@ -8,6 +8,13 @@ class SingleEvent extends React.Component {
   static propTypes = {
     event: eventShape.eventShape,
     passEventToEdit: PropTypes.func,
+    deleteSingleEvent: PropTypes.func,
+  }
+
+  deleteSingleEvent = (e) => {
+    e.preventDefault();
+    const { deleteSingleEvent, event } = this.props;
+    deleteSingleEvent(event.id);
   }
 
   editEvent = (e) => {
@@ -27,6 +34,11 @@ class SingleEvent extends React.Component {
           <span className="col">
             <button className="btn btn-default" onClick={this.editEvent}>
               <i className="fas fa-pencil-alt"></i>
+            </button>
+          </span>
+          <span className="col">
+            <button className="btn btn-default" onClick={this.deleteSingleEvent}>
+              <i className="fas fa-trash-alt"></i>
             </button>
           </span>
         </div>
