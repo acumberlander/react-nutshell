@@ -49,6 +49,20 @@ class Events extends React.Component {
     }
   };
 
+  passEventToEdit = eventId => this.setState({ isEditing: true, editId: eventId });
+
+  deleteSingleEvent = (eventId) => {
+    eventRequests.deleteEvent(eventId)
+      .then(() => {
+        const currentUid = authRequests.getCurrentUid();
+        smashRequests.getEventsFromMeAndFriends(currentUid)
+          .then((events) => {
+            this.setState({ events });
+          });
+      })
+      .catch(err => console.error('error with delete single', err));
+  }
+
   render() {
     const passEventToEdit = (eventId) => {
       this.setState({ isEditing: true, editId: eventId });
@@ -64,6 +78,7 @@ class Events extends React.Component {
         event={event}
         key={event.id}
         passEventToEdit={passEventToEdit}
+        deleteSingleEvent={this.deleteSingleEvent}
       />
     ));
     return (
